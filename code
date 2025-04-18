@@ -1,0 +1,38 @@
+
+#include "Ultrasonic.h"
+Ultrasonic ultrasonic(3, 2); 
+
+const int ledVermelho = 6;
+const int buzzer = 11;
+
+long microsec = 0; 
+float distanciaCM = 0;
+
+void setup() {
+  Serial.begin(9600); 
+  pinMode(ledVermelho, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+}
+
+void loop() {
+  microsec = ultrasonic.timing();
+  distanciaCM = ultrasonic.convert(microsec, Ultrasonic::CM);
+
+  ledDistancia();
+  Serial.print(distanciaCM);
+  Serial.println(" cm");
+  delay(500);
+}
+
+void ledDistancia() {
+  digitalWrite(ledVermelho, LOW);
+
+  if (distanciaCM < 30) { 
+    digitalWrite(ledVermelho, HIGH); 
+    digitalWrite(buzzer, HIGH);
+  }
+
+  else{
+  digitalWrite(buzzer, LOW);
+  }
+}
